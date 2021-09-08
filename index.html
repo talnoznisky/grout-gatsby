@@ -9,7 +9,7 @@
                 root = document.getElementById('root')
                 // data['data'].forEach(element => {
                 data.forEach(element => {
-                    root.append(element['line'])
+                    root.append(element['line'].replaceAll('Gatsby', 'Groutsby'))
                 });
 
             }
@@ -23,7 +23,6 @@
             }
 
             const data = await getJSON()
-            // data.replace
             appendData(data)
         })();
     </script>
