@@ -1,0 +1,29 @@
+<html>
+    <meta charset="UTF-8">
+    <body>
+        <div id='root'></div>
+    </body>
+    <script>
+        (async() => {
+            function appendData(data){
+                root = document.getElementById('root')
+                data['data'].forEach(element => {
+                    root.append(element['line'])
+                });
+
+            }
+
+            async function getJSON(){
+                const file = 'lines.json'
+                const response = await fetch(file)
+                const data = await response.json()
+
+                return data
+            }
+
+            const data = await getJSON()
+            appendData(data)
+        })();
+    </script>
+    
+</html>
