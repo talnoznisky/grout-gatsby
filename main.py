@@ -1,4 +1,3 @@
-import html
 import itertools
 import json
 import nltk
@@ -15,12 +14,8 @@ soup = BeautifulSoup(data, 'html.parser')
 
 reg = re.compile('chapter-*')
 text = soup.find_all('p')
-sentences = [l.text for l in text]
+sentences = list(itertools.chain(*[nltk.sent_tokenize(l.text) for l in text]))
 
-# merge these into one list
-test_sentences = nltk.sent_tokenize(sentences[1:2])
-
-# create lines object
 alpha_tokens = sorted(sentences, key=lambda s: s if s[0].isalnum() else s[1:])
 len_tokens = sorted(sentences, key=lambda s: len(s))
 
@@ -36,8 +31,7 @@ for t in sentences:
     lines.append(obj)
     i+=1
 
-# with open('lines.js','w+', encoding='utf-8') as f:
-#     json.dump(lines, f, ensure_ascii=False)
-
+with open('lines.json','w+', encoding='utf-8') as f:
+    json.dump(lines, f, ensure_ascii=False)
 
 

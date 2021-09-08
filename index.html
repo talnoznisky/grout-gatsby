@@ -7,7 +7,8 @@
         (async() => {
             function appendData(data){
                 root = document.getElementById('root')
-                data['data'].forEach(element => {
+                // data['data'].forEach(element => {
+                data.forEach(element => {
                     root.append(element['line'])
                 });
 
@@ -22,6 +23,7 @@
             }
 
             const data = await getJSON()
+            // data.replace
             appendData(data)
         })();
     </script>
