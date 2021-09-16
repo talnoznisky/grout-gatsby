@@ -1,11 +1,12 @@
 import itertools
 import json
-import nltk
 import re
-
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 from bs4 import BeautifulSoup
 
-nltk.download('punkt')
+punkt_param = PunktParameters()
+punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+sentence_splitter = PunktSentenceTokenizer(punkt_param)
 
 with open('greatgatsby.html', 'r') as f:
     data = f.read()
@@ -14,8 +15,10 @@ soup = BeautifulSoup(data, 'html.parser')
 
 reg = re.compile('chapter-*')
 text = soup.find_all('p')
-paragraphs = [nltk.sent_tokenize(l.text) for l in text]
+paragraphs = [sentence_splitter.tokenize(l.text.replace('?"', '? "').replace('!"', '! "').replace('."', '. "')) for l in text]
 sentences = list(itertools.chain(*paragraphs))
+
+sentences = [text.replace('? "', '?"').replace('! "', '!"').replace('. "', '."') for text in sentences]
 
 alpha_tokens = sorted(sentences, key=lambda s: s if s[0].isalnum() else s[1:])
 len_tokens = sorted(sentences, key=lambda s: len(s))
