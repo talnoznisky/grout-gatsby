@@ -1,6 +1,10 @@
 <html>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+     
+    </head>
+    
     <body>
         <h3>The Great Groutsby</h3>
         <div class="dedication">
@@ -15,33 +19,25 @@
             <p><cite>Thomas Parke d’Invilliers</cite></p>
             </div></blockquote>
             </div>
+            <label>Sort by:</label>
+                <select id='sort' name='sort' onchange="writeBook()">
+                    <option value='default'>First to last</option>
+                    <!-- <option value='defaultRev'>Last to first</option> -->
+                    <option value='alpha'>A to Z</option>
+                    <!-- <option value='alphaRev'>Z to A</option> -->
+                    <option value='length'>Shortest to longest</option>
+                    <!-- <option value='lengthRev'>Shortest to longest</option> -->
+                </select>
         <div id='root'></div>
 
     </body>
     <script>
-
         function createParagraph(line){
             paragraph = document.createElement('p')
             paragraph.textContent = line
-
+            console.log('p')
             return paragraph
         }
-
-        function createChapter(chapter){
-            root = document.getElementById('root')
-            
-            chapterDiv = document.createElement('div')
-            chapterDiv.setAttribute('id', chapter["chapter"])
-            chapterDiv.classList.add('chapter')
-            
-            headerDiv = document.createElement('div')
-            headerDiv.classList.add('header')
-
-            headerDiv.textContent = chapter['chapter_name']
-            
-            chapterDiv.append(headerDiv)
-            root.append(chapterDiv)
-        };
 
         function getSortedLines(lines, sort){
             newArr = []
@@ -51,6 +47,12 @@
             return newArr
         };
 
+        function removeAllChildNodes(parent) {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+        }
+
         async function getJSON(file_name){
             const file = `${file_name}.json`
             const response = await fetch(file)
@@ -59,22 +61,22 @@
             return data
         }
 
-        (async() => {
-            function appendData(data){
-                root = document.getElementById('root')
-                data.forEach(element => {
-                    root.append(element['line'].replaceAll('Gatsby', 'Groutsby'))
-                });
-            }
+        async function writeBook(){
+            root = document.getElementById('root')
+            removeAllChildNodes(root)
+
+            sort = document.getElementById('sort').value
+            console.log(sort)
 
             const sentences = await getJSON('lines')
             const p_indices = await getJSON('p_indices')
 
-            const sorted = getSortedLines(sentences, 'default')
+            console.log(sentences[0])
+            const sorted = getSortedLines(sentences, sort)
 
             p_indices.forEach(p => {
-                root = document.getElementById('root')
-
+                
+                // console.log(root)
                 let s = ''
                 if(p.length == 1){
                     s += sorted[p[0]]
@@ -88,7 +90,10 @@
                 root.append(paragraph)
             })
 
-        })();    
+        }
+
+        writeBook('default')
+
         </script>
 
 </html>
