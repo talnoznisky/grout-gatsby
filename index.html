@@ -39,14 +39,7 @@
         <h2>The Great Groutsby</h2>
         <p>F. Scott Fitzgerald</p>
         <div id='banner'><img src='ascii-eyes.png'></div>
-            <br>
-            <label>Sort by:</label>
-                <select id='sort' name='sort' onchange="writeBook()">
-                    <option value='default'>First to last</option>
-                    <option value='alpha'>A to Z</option>
-                    <option value='length'>Shortest to longest</option>
-                </select>
-            <br>
+ 
         <div class="dedication">
             <p>Once again to Zelda</p>
             </div>
@@ -59,6 +52,12 @@
             <p><cite>Thomas Parke d’Invilliers</cite></p>
             </div></blockquote>
             </div>         
+            <label>Sort by:</label>
+                <select id='sort' name='sort' onchange="writeBook()">
+                    <option value='default'>First to last</option>
+                    <option value='alpha'>A to Z</option>
+                    <option value='length'>Shortest to longest</option>
+                </select>            
         <div id='root'></div>
 
     </body>
