@@ -11,62 +11,122 @@
         <meta name="theme-color" content="#ffffff">
         <title></title>
         <style>
-            #seealso{
-                font-size: x-small;
-            }
-            body {
-                margin-left: 1em;
-            }
-            img {
-                max-width: 60%;
-            }
-            p {
-                max-width: 60%;
-            }
 
-            @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
-                body {
-                    margin: 1em;
-                    font-size: 18px;
-                }
-                p {
-                    max-width: 100%;
-                }
-                img {
-                    max-width: 100%;
-                }
-            }
+        .dropbtn {
+            background-color: transparent;
+            border: transparent; 
+            font-size: large;
+            padding: 0;
+        }
+        .dropdown {
+            position: absolute;
+            display: inline-block;
+            top:0;
+            right: 0;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid black;
+            z-index: 1;
+            right:0;
+        }
+
+        .dropdown-content a {
+            color:blue;
+            background-color: white;
+            padding: 1em;
+            display: block;
+        }
+        .show {display:block;}
+
+        .container {
+            width: 60%;
+            position: relative;
+        }
+        body {
+            margin-left: 1em;
+        }
+        img {
+            max-width: 100%;
+        }
+        p {
+            max-width: 100%;
+        }
+        hr {
+            margin: 0;
+        }
+        @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+        .container {
+            width: 100%;
+        }
+        body {
+            margin: 1em;
+            font-size: 18px;
+        }
+    }
     </style>
     </head>
     
     <body>
-        <h2 id='title'></h2>
-        <p>F. Scott Fitzgerald</p>
-        <p id='seealso'>See also: </p>
-        <div id='banner'><img src='ascii-eyes.png'></div>
-        
-        <div class="dedication">
-            <p>Once again to Zelda</p>
-            </div>
-            <div class="epigraph">
-            <blockquote class="verse"><div>
-            <p><span>Then wear the gold hat, if that will move her;</span><br>
-            <span class="i1">If you can bounce high, bounce for her too,</span><br>
-            <span>Till she cry “Lover, gold-hatted, high-bouncing lover,</span><br>
-            <span class="i1">I must have you!”</span></p>
-            <p><cite>Thomas Parke d’Invilliers</cite></p>
-            </div></blockquote>
-            </div>         
-            <label>Sort by:</label>
-                <select id='sort' name='sort' onchange="writeBook()">
-                    <option value='default'>First to last</option>
-                    <option value='alpha'>A to Z</option>
-                    <option value='length'>Shortest to longest</option>
-                </select>            
-        <div id='root'></div>
+        <div class='container'>
+            <h2 id='title'></h2>
+            <div class="dropdown">
+                <button onclick="dd()" class="dropbtn">ℹ️</button>
+                <div class="dropdown-content">
+                    <a id="oppositeLink"></a>
+                    <hr>
+                    <a id="repo"></a>
+                </div>
+            </div> 
+            <p>F. Scott Fitzgerald</p>
+            <div id='banner'><img src='ascii-eyes.png'></div>
+            <div class="dedication">
+                <p>Once again to Zelda</p>
+                </div>
+                <div class="epigraph">
+                <blockquote class="verse"><div>
+                <p><span>Then wear the gold hat, if that will move her;</span><br>
+                <span class="i1">If you can bounce high, bounce for her too,</span><br>
+                <span>Till she cry “Lover, gold-hatted, high-bouncing lover,</span><br>
+                <span class="i1">I must have you!”</span></p>
+                <p><cite>Thomas Parke d’Invilliers</cite></p>
+                </div></blockquote>
+                </div>         
+                <label>Sort by:</label>
+                    <select id='sort' name='sort' onchange="writeBook()">
+                        <option value='default'>First to last</option>
+                        <option value='alpha'>A to Z</option>
+                        <option value='alpha_reverse'>Z to A</option>
+                        <option value='length'>Shortest to longest</option>
+                        <option value='length_reverse'>Longest to shortest</option>
+                    </select>            
+            <div id='text'></div>
+        </div>
+
 
     </body>
     <script>
+        // dropdown functionality. Thanks w3 schools!
+        function dd() {
+            document.getElementsByClassName("dropdown-content")[0].classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
         // set H2/title
         function setTitle(){
             title = document.getElementsByTagName('title')[0]
@@ -80,11 +140,19 @@
         // set link
         function setLink(){
             seealso = document.getElementById('seealso')
-            link = document.createElement('a')
-            linkAddress = document.location.href.includes('greatgroutsby') ? 'thegroutgatsby.com' : 'thegreatgroutsby.com'
-            link.href = `https://${linkAddress}`
-            link.innerText = linkAddress
-            seealso.append(link)
+            
+            oppositeLink = document.getElementById('oppositeLink')
+            oppositeLinkAddress = document.location.href.includes('greatgroutsby') ? 'thegroutgatsby.com' : 'thegreatgroutsby.com'
+            oppositeLinkAddress = `https://${oppositeLinkAddress}`
+            oppositeLink.href = oppositeLinkAddress
+            oppositeLink.innerText = oppositeLinkAddress
+            
+            repoLink = document.getElementById('repo')
+            repoName = document.location.href.includes('greatgroutsby') ? 'great-groutsby' : 'grout-gatsby'
+            repoLinkAddress = `https://github.com/talnoznisky/${repoName}`
+            repoLink.href = repoLinkAddress
+            repoLink.innerText = repoLinkAddress
+
         }
 
         function createParagraph(line){
@@ -96,9 +164,26 @@
 
         function getSortedLines(lines, sort){
             newArr = []
-            lines.forEach(line => {
-                newArr.push(line[`${sort}`])
-            })
+            if(sort.includes('reverse')){
+                sort = sort.split('_')[0]
+                lines.forEach(line => {
+                    newArr.push(line[`${sort}`])
+
+                })
+                if (sort.includes('alpha')){
+                    newArr.sort(function (a, b) {
+                        return a.toLowerCase().localeCompare(b.toLowerCase());
+                    });
+                }
+                
+                newArr.reverse()
+                
+            } else{
+                lines.forEach(line=> {
+                    newArr.push(line[`${sort}`])
+                })
+            }
+
             return newArr
         };
 
@@ -117,7 +202,7 @@
         }
 
         async function writeBook(){
-            root = document.getElementById('root')
+            root = document.getElementById('text')
             removeAllChildNodes(root)
 
             sort = document.getElementById('sort').value
@@ -146,7 +231,7 @@
                 root.append(paragraph)
             })
         }
-        
+
         setTitle()
         setLink()
         writeBook('default')
@@ -154,6 +239,4 @@
         </script>
 
 </html>
-
-
 
