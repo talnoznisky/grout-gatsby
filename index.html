@@ -9,7 +9,11 @@
         <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
         <meta name="msapplication-TileColor" content="#da532c">
         <meta name="theme-color" content="#ffffff">
+        <title></title>
         <style>
+            #seealso{
+                font-size: x-small;
+            }
             body {
                 margin-left: 1em;
             }
@@ -36,10 +40,11 @@
     </head>
     
     <body>
-        <h2>The Great Groutsby</h2>
+        <h2 id='title'></h2>
         <p>F. Scott Fitzgerald</p>
+        <p id='seealso'>See also: </p>
         <div id='banner'><img src='ascii-eyes.png'></div>
- 
+        
         <div class="dedication">
             <p>Once again to Zelda</p>
             </div>
@@ -62,10 +67,30 @@
 
     </body>
     <script>
+        // set H2/title
+        function setTitle(){
+            title = document.getElementsByTagName('title')[0]
+            h2 = document.getElementById('title')
+            titleText = document.location.href.includes("greatgroutsby") ? "The Great Groutsby" : 'The Grout Gatsby'
+            
+            title.innerText = titleText
+            h2.innerText = titleText
+        }
+
+        // set link
+        function setLink(){
+            seealso = document.getElementById('seealso')
+            link = document.createElement('a')
+            linkAddress = document.location.href.includes('greatgroutsby') ? 'thegroutgratsby.com' : 'thegreatgroutsby.com'
+            link.href = `https://${linkAddress}`
+            link.innerText = linkAddress
+            seealso.append(link)
+        }
+
         function createParagraph(line){
             paragraph = document.createElement('p')
             paragraph.textContent = line
-            console.log('p')
+
             return paragraph
         }
 
@@ -96,12 +121,10 @@
             removeAllChildNodes(root)
 
             sort = document.getElementById('sort').value
-            console.log(sort)
 
             const sentences = await getJSON('lines')
             const p_indices = await getJSON('p_indices')
 
-            console.log(sentences[0])
             const sorted = getSortedLines(sentences, sort)
 
             p_indices.forEach(p => {
@@ -112,13 +135,20 @@
                     sorted.slice(p[0], p[p.length-1] + 1).forEach(line => {s+= line + ' '})
                 }
                 
-                s = s.replaceAll('Gatsby', 'Groutsby')
+                if(document.location.href.includes('greatgroutsby')){
+                    s = s.replaceAll('Gatsby', 'Groutsby')
+                }else{
+                    s = s.replaceAll('great', 'grout')
+                }
+                    
                 
                 paragraph = createParagraph(s)
                 root.append(paragraph)
             })
         }
-
+        
+        setTitle()
+        setLink()
         writeBook('default')
 
         </script>
